@@ -10,13 +10,13 @@ export default function Landing() {
       <h3>Instructions for Use</h3>
       <ul>
         <li>
-          The Notes Dashboard link takes you to the actual Notes app.
+          The <em>Notes</em> link takes you to the actual Notes app.
         </li>
         <li>
-          From there you can view your saved notes (the default display), create a new note, or edit an existing note.
+          You can create a new note with the <em>New Note</em> menu option.
         </li>
         <li>
-          To delete a note, simply Edit it then click the Delete button on the edit form.
+          From <em>Notes</em> you can view your saved notes (the default display), create a new note, edit or delete an existing note.
         </li>
       </ul>
     </div>

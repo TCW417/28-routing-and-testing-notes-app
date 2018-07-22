@@ -1,0 +1,69 @@
+@import "vars";
+
+
+// content
+html, body {
+  position: relative; 
+  font-family: $font-primary;
+  max-width: 1024px;
+  margin: auto;
+}
+head, script, link  { display: none; }
+p { display: inline-block; }
+span,em,strong { display: inline; }
+em { font-style: italic; }
+strong { font-weight: bold; }
+
+body {
+  background: $color-body-background;
+  background-image: $background-texture;
+  font-size: $font-base-size;
+  font-family: $font-primary;
+}
+
+@for $i from 6 through 1 {
+  h#{$i} {
+    font-size: 9/($i + 2) * 1em;;
+  }
+}
+
+
+// form
+label {
+  font-size: 1.25em;
+  font-weight: bolder;
+  margin-bottom: $pad;
+}
+
+textarea, input {
+  background: $color-white;
+  border: none;
+  padding: 15px;
+  border-radius: 3px;
+  margin-bottom: 20px;
+
+  &::placeholder {
+    color: $color-lightgrey;
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+button,input[type="submit"] {
+  background: $color-lightgrey;
+  padding: $pad;
+  border: none;
+  border-radius: 3px;
+  display: inline;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+  &:hover {
+    background: $color-grey;
+  }
+
+  &:active {
+    background: $color-darkgrey;
+  }
+}

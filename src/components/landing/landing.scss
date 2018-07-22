@@ -1,0 +1,37 @@
+@import '../../style/vars';
+
+.about {
+  background-color: $color-note-background;
+  box-shadow: $box-shadow;
+  border: 2px solid black;
+  border-radius: 8px;
+  margin: $pad;
+  padding: $pad;
+  max-width: 500px;
+  min-width: 300px;
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  h3 {
+    padding-top: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  p {
+    padding-top: 0.5em;
+  }
+
+  ul, li { 
+    margin-left: $pad * 2; 
+    list-style-type: disc;
+  }
+
+  li {
+    display: list-item;
+    list-style: disc;
+    padding-top: 0.5em;
+  }
+}
