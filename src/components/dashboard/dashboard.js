@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import NoteList from '../note-list/note-list';
 import NoteEdit from '../note-edit/note-edit';
+import Modal from '../modal/modal';
 import './dashboard.scss';
 
 export default class Dashboard extends React.Component {
@@ -12,7 +13,14 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       allNotes: localStorage.allNotes ? JSON.parse(localStorage.allNotes) : [],
-      note: {},
+      note: {
+        title: '',
+        content: '',
+        editing: false,
+        cancelled: false,
+        uuid: '',
+        createdOn: '',
+      },
       error: false,
       action: props.action || null,
     };
@@ -28,13 +36,13 @@ export default class Dashboard extends React.Component {
     this.setState({ error: false });
     let { allNotes } = this.state;
     if (note.editing) {
-      allNotes = this.state.allNotes.filter(n => n._id !== note._id);
+      note.editing = false;
+      allNotes = this.state.allNotes.map(n => (n._id === note._id ? note : n));
     } else {
       note.createdOn = new Date();
       note._id = uuid();
+      allNotes = allNotes.length ? [note].concat(allNotes) : [note];
     }
-    note.editing = false;
-    allNotes = allNotes.length ? [note].concat(allNotes) : [note];
     localStorage.setItem('allNotes', JSON.stringify(allNotes));
     return this.setState({ allNotes, action: null });
   }
@@ -45,7 +53,16 @@ export default class Dashboard extends React.Component {
 
   handleEditNote = (id) => {
     const note = this.state.allNotes.filter(n => n._id === id)[0];
-    return this.setState({ note, action: 'edit' });
+    return this.setState((previousState) => { 
+      note.editing = true;
+      note.cancelled = false;
+      console.log('handleEditNote setting state.note:', note);
+      return {
+        ...previousState, 
+        note, 
+        action: 'edit', 
+      };
+    });
   }
 
   handleDeleteNote = (id) => {
@@ -60,10 +77,19 @@ export default class Dashboard extends React.Component {
   render() {
     return (
       <div className="note-grid">
-          {this.state.action !== null
-            ? <NoteEdit mode={this.state.action} addNote={this.addNote} note={this.state.note}/>
-            : <NoteList addNote={this.addNote} delNote={this.handleDeleteNote} editNote={this.handleEditNote} notes={this.state.allNotes} /> 
-          }
+          <Modal mode={this.state.action}>
+            <NoteEdit 
+              mode={this.state.action} 
+              addNote={this.addNote} 
+              note={this.state.note}
+            />
+          </Modal>
+          <NoteList 
+            addNote={this.addNote} 
+            delNote={this.handleDeleteNote} 
+            editNote={this.handleEditNote} 
+            notes={this.state.allNotes} 
+          />
       </div>
     );
   }

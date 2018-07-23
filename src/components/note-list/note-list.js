@@ -10,6 +10,7 @@ export default class NoteList extends React.Component {
     if (mode === 'delete') {
       return this.props.delNote(event.target.id);
     }
+    console.log('passing editNote', event.target.id);
     return (
       this.props.editNote(event.target.id)
     );
@@ -20,6 +21,7 @@ export default class NoteList extends React.Component {
       this.props.notes.map((note) => {
         return (
           <div className="note-list" key={note._id}>
+            {this.children}
             <NoteItem note={note}/>
             <div className="note-buttons">
               <button id={note._id} name="edit" onClick={this.handleEditNote}>Edit</button>
