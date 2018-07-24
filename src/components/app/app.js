@@ -1,8 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
-// import Dashboard from '../dashboard/dashboard';
-// import Landing from '../landing/landing';
-// import NoteEdit from '../note-edit/note-edit';
 import Router from '../router/router';
 
 import './app.scss';
@@ -17,7 +14,8 @@ export default function App() {
             <nav>
               <ul>
                 <li><Link to="/">About</Link></li>
-                <li><Link to="/dashboard">Notes Dashboard</Link></li>
+                <li><Link to="/dashboard">Notes</Link></li>
+                <li className="create-note"><Link to="/create">New Note</Link></li>
               </ul>
             </nav>
           </header>

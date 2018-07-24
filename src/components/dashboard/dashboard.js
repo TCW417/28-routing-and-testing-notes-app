@@ -1,8 +1,11 @@
 import React from 'react';
 import uuid from 'uuid/v4';
+import PropTypes from 'prop-types';
 
 import NoteList from '../note-list/note-list';
 import NoteEdit from '../note-edit/note-edit';
+import Modal from '../modal/modal';
+import './dashboard.scss';
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -10,50 +13,58 @@ export default class Dashboard extends React.Component {
 
     this.state = {
       allNotes: localStorage.allNotes ? JSON.parse(localStorage.allNotes) : [],
-      note: {},
+      note: {
+        title: '',
+        content: '',
+        editing: false,
+        cancelled: false,
+        uuid: '',
+        createdOn: '',
+      },
       error: false,
-      action: null,
+      action: props.action || null,
     };
   }
 
   addNote = (note) => {
-    console.log('aaaa addNote', note);
+    if (note.cancelled) {
+      return this.setState({ action: null, cancelled: false });
+    }
     if (note.title === '') {
-      return this.setState({ error: true });
+      return this.setState({ error: true, action: null });
     }
     this.setState({ error: false });
     let { allNotes } = this.state;
-    console.log('aaaa allNotes at the top of addNote', allNotes);
     if (note.editing) {
-      allNotes = this.state.allNotes.filter(n => n._id !== note._id);
-      console.log('aaaa editing: addNote allNotes post filter', allNotes);
+      note.editing = false;
+      allNotes = this.state.allNotes.map(n => (n._id === note._id ? note : n));
     } else {
       note.createdOn = new Date();
-      console.log('aaaaa creating: ADDING UUID to note!');
       note._id = uuid();
+      allNotes = allNotes.length ? [note].concat(allNotes) : [note];
     }
-    note.editing = false;
-    console.log('aaaaa note', note);
-    console.log('aaaa allNotes', allNotes);
-    allNotes = allNotes.length ? [note].concat(allNotes) : [note];
-    console.log('aaaa addNote post concat', allNotes);
     localStorage.setItem('allNotes', JSON.stringify(allNotes));
     return this.setState({ allNotes, action: null });
   }
 
   handleCreateNewNote = () => {
-    console.log('hhhhh handleCreateNewNote');
     return this.setState({ action: 'create' });
   }
 
   handleEditNote = (id) => {
-    console.log('hhhhh handleEditNote', id);
     const note = this.state.allNotes.filter(n => n._id === id)[0];
-    return this.setState({ note, action: 'edit' });
+    return this.setState((previousState) => { 
+      note.editing = true;
+      note.cancelled = false;
+      return {
+        ...previousState, 
+        note, 
+        action: 'edit', 
+      };
+    });
   }
 
   handleDeleteNote = (id) => {
-    console.log('hhhhhh handleDeleteNote');
     this.setState({ action: 'delete' });
     const allNotes = this.state.allNotes.filter((note) => {
       return note._id !== id;
@@ -62,21 +73,44 @@ export default class Dashboard extends React.Component {
     return this.setState({ allNotes, action: null });
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ note: { ...this.state.note, [name]: value } });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.addNote(this.state.note);
+  }
+
+  handleCancel = () => {
+    this.setState({ note: { ...this.state.note, cancelled: true } }, () => this.addNote(this.state.note));
+  }
+
   render() {
-    console.log('!!! dashboard, allNotes', this.state.allNotes);
     return (
-      <div className="dashboard">
-        <div>
-          <button onClick={this.handleCreateNewNote}>Create a New Note</button>
-        </div>
-        {console.log('!!! dashboard this.state.action', this.state.action)}
-        <div>
-          {this.state.action !== null
-            ? <NoteEdit mode={this.state.action} addNote={this.addNote} note={this.state.note}/>
-            : <NoteList addNote={this.addNote} delNote={this.handleDeleteNote} editNote={this.handleEditNote} notes={this.state.allNotes} /> 
-          }
-        </div>
+      <div className="note-grid">
+          <Modal mode={this.state.action}>
+            <NoteEdit 
+              mode={this.state.action} 
+              addNote={this.addNote}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit}
+              handleCancel={this.handleCancel}
+              note={this.state.note}
+            />
+          </Modal>
+          <NoteList 
+            addNote={this.addNote} 
+            delNote={this.handleDeleteNote} 
+            editNote={this.handleEditNote} 
+            notes={this.state.allNotes} 
+          />
       </div>
     );
   }
 }
+
+Dashboard.propTypes = {
+  action: PropTypes.string,
+};

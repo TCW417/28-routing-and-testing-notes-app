@@ -1,0 +1,47 @@
+@import '../../style/vars';
+
+.note-edit {
+  width: 45%;
+  background-color: $color-note-background;
+  box-shadow: $box-shadow;
+  border: 2px solid black;
+  border-radius: 8px;
+  margin: $pad;
+  padding: $pad;
+  margin-bottom: $pad * 4;
+  max-width: 300px;
+  min-width: 400px;
+  max-width: 1024px;
+
+  h2 {
+    font-weight: bold;
+    font-size: $font-base-size * 1.5;
+  }
+
+  form {
+
+    textarea {
+      padding: $pad;
+      width: 100%;
+      height: $font-base-size * 10;
+      font-family: $font-primary;
+    }
+
+    input {
+      padding: $pad;
+      width: 100%;
+      font-family: $font-primary
+    }
+    .edit-buttons {
+      box-sizing: border-box;
+      width: 200px;
+      height: 35px;
+      margin-right: $pad;
+      margin-left: auto;
+
+      button {
+        margin-left: $pad*2;
+      }
+    }
+  }
+}
