@@ -16,7 +16,8 @@
     "tests": "jest --coverage --runInBand",
     "watch": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "cypress": "cypress open"
   },
   "keywords": [],
   "author": "",

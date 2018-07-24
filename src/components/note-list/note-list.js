@@ -10,7 +10,6 @@ export default class NoteList extends React.Component {
     if (mode === 'delete') {
       return this.props.delNote(event.target.id);
     }
-    console.log('passing editNote', event.target.id);
     return (
       this.props.editNote(event.target.id)
     );

@@ -4,7 +4,7 @@
     "browser": true
   },
   "parser": "babel-eslint",
-  "plugins": ["jest", "react"],
+  "plugins": ["jest", "react", "cypress"],
   "rules": {
     "arrow-body-style": "off",
     "global-require": "off",

@@ -56,7 +56,6 @@ export default class Dashboard extends React.Component {
     return this.setState((previousState) => { 
       note.editing = true;
       note.cancelled = false;
-      console.log('handleEditNote setting state.note:', note);
       return {
         ...previousState, 
         note, 
@@ -74,13 +73,30 @@ export default class Dashboard extends React.Component {
     return this.setState({ allNotes, action: null });
   }
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ note: { ...this.state.note, [name]: value } });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.addNote(this.state.note);
+  }
+
+  handleCancel = () => {
+    this.setState({ note: { ...this.state.note, cancelled: true } }, () => this.addNote(this.state.note));
+  }
+
   render() {
     return (
       <div className="note-grid">
           <Modal mode={this.state.action}>
             <NoteEdit 
               mode={this.state.action} 
-              addNote={this.addNote} 
+              addNote={this.addNote}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit}
+              handleCancel={this.handleCancel}
               note={this.state.note}
             />
           </Modal>
